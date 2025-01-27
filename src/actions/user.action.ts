@@ -101,39 +101,55 @@ export async function getRandomUsers() {
   }
 }
 
-export async function toggleFollow({targetUserId}:{targetUserId:string}) {
+export async function toggleFollow({ targetUserId }: { targetUserId: string }) {
   try {
     const userId = await getDbUserId();
 
-    if(userId === targetUserId) throw new Error("You cannot follow yourself")
+    if (userId === targetUserId) {
+      throw new Error("You cannot follow yourself");
+    }
 
-      const existingFollow = await prisma.follows.findUnique({
-        where:{
-          followerId_followingId : {
-            followerId:userId,
-            followingId:targetUserId
-          }
-        }
-      })
+    const existingFollow = await prisma.follows.findUnique({
+      where: {
+        followerId_followingId: {
+          followerId: userId,
+          followingId: targetUserId,
+        },
+      },
+    });
 
-      if(existingFollow) {
-        // unfollow
-        await prisma.follows.delete({
-          where:{
-            followerId_followingId : {
-              followerId:userId,
-              followingId:targetUserId
-          }
-        }
-        })
-        else {
-          //follow
-         await prisma.$transaction()
-        }
-      }
+    if (existingFollow) {
+      // unfollow
+      await prisma.follows.delete({
+        where: {
+          followerId_followingId: {
+            followerId: userId,
+            followingId: targetUserId,
+          },
+        },
+      });
+    } else {
+      // follow
+      await prisma.$transaction([
+        prisma.follows.create({
+          data: {
+            followerId: userId,
+            followingId: targetUserId,
+          },
+        }),
+        prisma.notification.create({
+          data: {
+            type: "FOLLOW",
+            userId: targetUserId, //user being followed
+            creatorId: userId, // user following
+          },
+        }),
+      ]);
+    }
 
-
+    return { success: true };
   } catch (error) {
-    
+    console.error("Error in toggleFollow:", error);
+    return { success: false, error: "Error toggling follow" };
   }
 }
