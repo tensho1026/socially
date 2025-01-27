@@ -37,27 +37,103 @@ export async function syncUser() {
   }
 }
 
-export async function getUserByClerkId(clerkId:string) {
+export async function getUserByClerkId(clerkId: string) {
   return prisma.user.findUnique({
-    where:{
+    where: {
       clerkId,
     },
-    include:{
-      _count:{
-        select:{
-          followers:true,
-          following:true,
-          posts:true
-        }
-      }
-    }
-  })
+    include: {
+      _count: {
+        select: {
+          followers: true,
+          following: true,
+          posts: true,
+        },
+      },
+    },
+  });
 }
 
 export async function getDbUserId() {
-  const {userId:clerkId} = await auth();
-  if(!clerkId) throw new Error("Unauthorized")
-    const user = await getUserByClerkId(clerkId);
-  if(!user) throw new Error("User not found")
-    return user.id
+  const { userId: clerkId } = await auth();
+  if (!clerkId) throw new Error("Unauthorized");
+  const user = await getUserByClerkId(clerkId);
+  if (!user) throw new Error("User not found");
+  return user.id;
+}
+
+export async function getRandomUsers() {
+  try {
+    const userId = await getDbUserId();
+    //get 3 random users exclude ourselves & users that we already follow
+    const randomUsers = await prisma.user.findMany({
+      where: {
+        AND: [
+          { NOT: { id: userId } },
+          {
+            NOT: {
+              followers: {
+                some: {
+                  followerId: userId,
+                },
+              },
+            },
+          },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        image: true,
+        _count: {
+          select: {
+            followers: true,
+          },
+        },
+      },
+      take: 3,
+    });
+    return randomUsers;
+  } catch (error) {
+    console.log("Error fetching random users", error);
+    return [];
+  }
+}
+
+export async function toggleFollow({targetUserId}:{targetUserId:string}) {
+  try {
+    const userId = await getDbUserId();
+
+    if(userId === targetUserId) throw new Error("You cannot follow yourself")
+
+      const existingFollow = await prisma.follows.findUnique({
+        where:{
+          followerId_followingId : {
+            followerId:userId,
+            followingId:targetUserId
+          }
+        }
+      })
+
+      if(existingFollow) {
+        // unfollow
+        await prisma.follows.delete({
+          where:{
+            followerId_followingId : {
+              followerId:userId,
+              followingId:targetUserId
+          }
+        }
+        })
+        else {
+          //follow
+         await prisma.$transaction()
+        }
+      }
+
+
+  } catch (error) {
+    
+  }
 }
