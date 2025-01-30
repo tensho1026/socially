@@ -62,6 +62,8 @@ export async function getDbUserId() {
   return user.id;
 }
 
+
+
 export async function getRandomUsers() {
   try {
     const userId = await getDbUserId();
