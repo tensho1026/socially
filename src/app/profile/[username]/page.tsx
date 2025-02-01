@@ -27,7 +27,7 @@ async function ProfilePageServer({ params }: { params:{ username: string } }) {
     ])
   return <ProfilePageClient 
   user={user}
-  post={posts}
+  posts={posts}
   likedPosts={likedPosts}
   isFollowing={isCurrentUserFollowing}
   />;
