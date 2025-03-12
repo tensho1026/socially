@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📸 Socially - Next.js SNSアプリ
 
-## Getting Started
+🚀 **デプロイ URL:** [https://socially-wine.vercel.app/](https://socially-wine.vercel.app/)
 
-First, run the development server:
+## 📌 概要
+**Socially** は、**Next.js + TypeScript** で構築された **SNS アプリ** です。  
+ユーザーは投稿を作成し、画像をアップロードし、他のユーザーと交流できます。  
+認証には **Clerk** を使用し、データ管理には **Prisma + PostgreSQL** を採用。  
+画像のアップロードには **UploadThing** を利用しています。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📷 スクリーンショット
+![image](https://github.com/user-attachments/assets/c93436d1-ffab-4acf-bcb0-1892128fe08a)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🔧 使用技術
+| 技術 | 説明 |
+|------|------|
+| **Next.js** | 最新の `App Router` を使用したフロントエンド |
+| **TypeScript** | 型安全な開発を実現 |
+| **Clerk** | ユーザー認証（ログイン・サインアップ） |
+| **ShadCN/UI** | UI コンポーネントライブラリ |
+| **Tailwind CSS** | スタイリング |
+| **Prisma** | ORM（データベース管理） |
+| **PostgreSQL** | データベース |
+| **UploadThing** | 画像アップロード機能 |
 
-To learn more about Next.js, take a look at the following resources:
+---昨日
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📌 主な機能
+✅ **ユーザー認証（Clerk）**  
+✅ **投稿作成・削除**  
+✅ **画像のアップロード（UploadThing）**  
+✅ **投稿一覧の表示**  
+✅ **いいね・コメント機能**  
+✅ **フォロー機能** 
+✅ **ダークモード対応（ShadCN/UI）** 
